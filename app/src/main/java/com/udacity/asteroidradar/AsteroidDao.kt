@@ -10,6 +10,12 @@ interface AsteroidDao {
     @Query("select * from asteroidentity")
     fun getAsteroidData(): LiveData<List<AsteroidEntity>>
 
+    @Query("SELECT * FROM asteroidentity WHERE closeApproachDate = :date")
+    fun getAsteroidDataToday(date: String): LiveData<List<AsteroidEntity>>
+
+    @Query("select * from asteroidentity")
+    fun getAsteroidDataWeek(): LiveData<List<AsteroidEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(entitys: List<AsteroidEntity>)
 

@@ -1,5 +1,6 @@
 package com.udacity.asteroidradar
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -11,6 +12,7 @@ class AsteroidAdapter(val clickListener: AsteroidListener) :
     ListAdapter<Asteroid, AsteroidAdapter.ViewHolder>(justDiffCallBack()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.e("MyTag", "onBindViewHolder gdeeeed")
         val item = getItem(position)  // 7aga sabta
         holder.bind(clickListener, item)
     }

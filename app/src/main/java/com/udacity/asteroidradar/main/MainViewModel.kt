@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var database = AsteroidDB.getDatabase(application)
     private val repository = AsteroidsRepo(database)
-    val asteroids = repository.data
+    var asteroids = repository.dataAll
 
     private val _pictureOfDay = MutableLiveData<PictureOfDay>()
     val pictureOfDay: LiveData<PictureOfDay>
@@ -44,5 +44,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     } // end of fun
+
+    //menu functions
+
+    fun showAllAsteroids() {
+        asteroids = repository.dataAll
+    }
+
+    fun showTodayAsteroids() {
+        asteroids = repository.dataToday
+//        Log.e("MyTag", "dataTodayd ataToda ydataToday")
+    }
+
+    fun showWeekAsteroids() {
+        asteroids = repository.dataWeek
+    }
 
 }

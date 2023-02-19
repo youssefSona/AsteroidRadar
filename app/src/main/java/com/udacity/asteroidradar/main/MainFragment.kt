@@ -25,64 +25,19 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        // Image of the day //
-//        val imageOfDayService = retrofit.create(ImageOfDayService::class.java)
-//        val imageCall = imageOfDayService.getImage(API_KEY)
-//        imageCall.enqueue(object : Callback<PictureOfDay> {
-//            override fun onResponse(call: Call<PictureOfDay>, response: Response<PictureOfDay>) {
-//                if (response.isSuccessful) {
-//                    val apiResponse = response.body()
-//                    if (apiResponse != null) {
-//                        val imageUrl = apiResponse.url
-//                        if (apiResponse.media_type == "image") {
-//                            Picasso.with(context).load(imageUrl)
-//                                .into(binding.activityMainImageOfTheDay)
-//                        }
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<PictureOfDay>, t: Throwable) {
-//                //handle error
-//            }
-//        })
-        // End of image of the day //
-
-
-        // RecyclerView //
-//        var asteroidsList: List<>
-//        val asteroidsInterface = retrofit.create(AsteroidsInterface::class.java)
-//        val asteroidsCall = asteroidsInterface.getAsteroidObject(API_KEY)
-//        asteroidsCall.enqueue(object : Callback<Asteroid> {
-//            override fun onResponse(call: Call<Asteroid>, response: Response<Asteroid>) {
-//                if (response.isSuccessful) {
-//                    val asteroidResponse = response.body()
-//                    if (asteroidResponse != null) {
-//                        Log.i("MyTag", asteroidResponse.toString())
-//                    }
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<Asteroid>, t: Throwable) {
-//                TODO("Not yet implemented")
-//            }
-//        })
-
         val adapter = AsteroidAdapter(AsteroidListener {
             findNavController().navigate(MainFragmentDirections.actionShowDetail(it))
         })
 
         binding.asteroidRecycler.adapter = adapter
+
         viewModel.asteroids.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
             }
         })
+//        binding.asteroidRecycler.layoutManager = LinearLayoutManager(requireContext())
 
-//        val adapter = AsteroidAdapter(asteroidsList)
-//        binding.asteroidRecycler.adapter = adapter
-//        binding.asteroidRecycler.layoutManager = LinearLayoutManager(context)
-        // End of RecyclerView //
 
         //menu
         setHasOptionsMenu(true)
@@ -95,6 +50,20 @@ class MainFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.show_all_menu -> {
+                viewModel.showAllAsteroids()
+            }
+            R.id.show_today_menu -> {
+                viewModel.showTodayAsteroids()
+            }
+            R.id.show_week_menu -> {
+                viewModel.showWeekAsteroids()
+            }
+//            else -> Log.i("My Taaag","asdasd")
+            else -> return super.onOptionsItemSelected(item)
+        }
+
         return true
     }
 }

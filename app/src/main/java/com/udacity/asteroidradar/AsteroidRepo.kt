@@ -8,8 +8,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
-class AsteroidsRepo(val database: AsteroidDB) {
-    val data: LiveData<List<Asteroid>> =
+class AsteroidsRepo(private val database: AsteroidDB) {
+
+    val dataAll: LiveData<List<Asteroid>> =
+        Transformations.map(database.asteroidDao.getAsteroidData()) {
+            it.asAsteroids()
+        }
+
+    val dataToday: LiveData<List<Asteroid>> =
+        Transformations.map(database.asteroidDao.getAsteroidDataToday("2023-02-19")) {
+            it.asAsteroids()
+        }
+
+    val dataWeek: LiveData<List<Asteroid>> =
         Transformations.map(database.asteroidDao.getAsteroidData()) {
             it.asAsteroids()
         }
