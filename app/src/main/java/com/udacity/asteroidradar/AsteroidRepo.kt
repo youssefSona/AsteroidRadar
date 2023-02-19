@@ -1,8 +1,11 @@
 package com.udacity.asteroidradar
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.udacity.asteroidradar.api.AsteroidApi
+import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,18 +13,26 @@ import org.json.JSONObject
 
 class AsteroidsRepo(private val database: AsteroidDB) {
 
+
+//    fun getRealEstateList(type: Type = Type.ALL): LiveData<List<RealEstate>> = when (type) {
+//        Type.ALL -> dao.getRealEstates()
+//        else -> dao.getRealEstatesByType(type)
+//    }
+
     val dataAll: LiveData<List<Asteroid>> =
         Transformations.map(database.asteroidDao.getAsteroidData()) {
             it.asAsteroids()
         }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     val dataToday: LiveData<List<Asteroid>> =
-        Transformations.map(database.asteroidDao.getAsteroidDataToday("2023-02-19")) {
+        Transformations.map(database.asteroidDao.getAsteroidDataToday(getNextSevenDaysFormattedDates()[0])) {
             it.asAsteroids()
         }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     val dataWeek: LiveData<List<Asteroid>> =
-        Transformations.map(database.asteroidDao.getAsteroidData()) {
+        Transformations.map(database.asteroidDao.getAsteroidDataWeek(getNextSevenDaysFormattedDates()[0])) {
             it.asAsteroids()
         }
 

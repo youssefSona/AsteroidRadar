@@ -1,11 +1,11 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
+import android.os.Build
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.annotation.RequiresApi
+import androidx.lifecycle.*
+import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.AsteroidDB
 import com.udacity.asteroidradar.AsteroidsRepo
 import com.udacity.asteroidradar.PictureOfDay
@@ -14,7 +14,25 @@ import kotlinx.coroutines.launch
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var database = AsteroidDB.getDatabase(application)
     private val repository = AsteroidsRepo(database)
-    var asteroids = repository.dataAll
+//    var asteroids = repository.dataAll
+
+
+//    val dataDateEnum: LiveData<DataDate> = DataDate.ALL
+
+    private val dataDate = MutableLiveData(DataDate.ALL)
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    val asteroids: LiveData<List<Asteroid>> = Transformations.switchMap(dataDate) { dataDate ->
+        when (dataDate) {
+            DataDate.TODAY -> repository.dataToday
+            DataDate.WEEK -> repository.dataWeek
+            DataDate.ALL -> repository.dataAll
+        }
+    }
+
+    fun setDataDate(d : DataDate){
+        dataDate.value = d
+    }
 
     private val _pictureOfDay = MutableLiveData<PictureOfDay>()
     val pictureOfDay: LiveData<PictureOfDay>
@@ -47,17 +65,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     //menu functions
 
-    fun showAllAsteroids() {
-        asteroids = repository.dataAll
-    }
+//    fun showAllAsteroids() {
+//        asteroids = repository.dataAll
+//    }
+//
+//    @RequiresApi(Build.VERSION_CODES.N)
+//    fun showTodayAsteroids() {
+//        asteroids = repository.dataToday
+////        Log.e("MyTag", "dataTodayd ataToda ydataToday")
+//    }
+//
+//    fun showWeekAsteroids() {
+//        asteroids = repository.dataWeek
+//    }
 
-    fun showTodayAsteroids() {
-        asteroids = repository.dataToday
-//        Log.e("MyTag", "dataTodayd ataToda ydataToday")
-    }
+}
 
-    fun showWeekAsteroids() {
-        asteroids = repository.dataWeek
-    }
 
+enum class DataDate {
+    WEEK,
+    ALL,
+    TODAY
 }
