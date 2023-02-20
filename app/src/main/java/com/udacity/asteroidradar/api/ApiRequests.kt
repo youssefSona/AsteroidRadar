@@ -26,6 +26,14 @@ interface ApiRequests {
         @Query("end_date") endDate: String = getNextSevenDaysFormattedDates()[7],
         @Query("api_key") apiKey: String = API_KEY
     ): String
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    @GET("neo/rest/v1/feed")
+    suspend fun getAsteroidsWorker(
+        @Query("start_date") startDate: String = getNextSevenDaysFormattedDates()[1],
+        @Query("end_date") endDate: String = getNextSevenDaysFormattedDates()[7],
+        @Query("api_key") apiKey: String = API_KEY
+    ): String
 }
 
 object AsteroidApi {

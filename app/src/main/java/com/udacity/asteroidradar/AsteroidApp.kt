@@ -18,6 +18,11 @@ class AsteroidApp : Application() {
         }
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        delayedInit()
+    }
+
     private fun setupRecurringWork() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.UNMETERED)

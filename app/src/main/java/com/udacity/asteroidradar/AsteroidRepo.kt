@@ -43,6 +43,17 @@ class AsteroidsRepo(private val database: AsteroidDB) {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    suspend fun refreshDataWorker() {
+        withContext(Dispatchers.IO) {
+            val response = AsteroidApi.retrofitService.getAsteroidsWorker()
+            val jasonOpj = JSONObject(response)
+            val webData = parseAsteroidsJsonResult(jasonOpj)
+            database.asteroidDao.insertAll(webData.asEntinty())
+        }
+
+    }
+
     suspend fun getPictureOfDay(): PictureOfDay {
         lateinit var pictureOfDay: PictureOfDay
         withContext(Dispatchers.IO) {

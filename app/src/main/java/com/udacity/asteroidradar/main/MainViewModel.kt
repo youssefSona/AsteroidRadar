@@ -11,6 +11,7 @@ import com.udacity.asteroidradar.AsteroidsRepo
 import com.udacity.asteroidradar.PictureOfDay
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.N)
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var database = AsteroidDB.getDatabase(application)
     private val repository = AsteroidsRepo(database)
@@ -19,7 +20,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     @RequiresApi(Build.VERSION_CODES.N)
     val asteroids: LiveData<List<Asteroid>> = Transformations.switchMap(dataDate) { dataDate ->
-        when (dataDate) {
+        when (dataDate!!) {
             DataDate.TODAY -> repository.dataToday
             DataDate.WEEK -> repository.dataWeek
             DataDate.ALL -> repository.dataAll
@@ -39,6 +40,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         getPictureOfDay()
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun refreshAsteroids() {
         viewModelScope.launch {
             try {
@@ -58,22 +60,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     } // end of fun
-
-    //menu functions
-
-//    fun showAllAsteroids() {
-//        asteroids = repository.dataAll
-//    }
-//
-//    @RequiresApi(Build.VERSION_CODES.N)
-//    fun showTodayAsteroids() {
-//        asteroids = repository.dataToday
-////        Log.e("MyTag", "dataTodayd ataToda ydataToday")
-//    }
-//
-//    fun showWeekAsteroids() {
-//        asteroids = repository.dataWeek
-//    }
 
 }
 
