@@ -14,10 +14,6 @@ import kotlinx.coroutines.launch
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var database = AsteroidDB.getDatabase(application)
     private val repository = AsteroidsRepo(database)
-//    var asteroids = repository.dataAll
-
-
-//    val dataDateEnum: LiveData<DataDate> = DataDate.ALL
 
     private val dataDate = MutableLiveData(DataDate.ALL)
 

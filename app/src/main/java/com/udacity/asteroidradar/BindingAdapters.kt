@@ -54,9 +54,7 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
 fun bindImagePictureOfDay(imageView: ImageView, data: PictureOfDay?) {
 
     if (data !=null) {
-
         if (data.mediaType == "image") {
-
             Picasso.with(imageView.context)
                 .load(data.url)
                 .into(imageView)
@@ -64,12 +62,10 @@ fun bindImagePictureOfDay(imageView: ImageView, data: PictureOfDay?) {
             val description = imageView.resources.getString(
                 R.string.nasa_picture_of_day_content_description_format)
             imageView.contentDescription = String.format(description, data.title)
-
         }
     }else{
         val description = imageView.resources.getString(
             R.string.this_is_nasa_s_picture_of_day_showing_nothing_yet)
         imageView.contentDescription = description
-
     }
 }

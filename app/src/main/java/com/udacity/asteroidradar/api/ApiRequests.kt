@@ -1,5 +1,7 @@
 package com.udacity.asteroidradar.api
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.asteroidradar.Constants
@@ -17,10 +19,11 @@ interface ApiRequests {
         @Query("api_key") apiKey: String = API_KEY
     ): PictureOfDay
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @GET("neo/rest/v1/feed")
     suspend fun getAsteroids(
-        @Query("start_date") startDate: String = "",
-        @Query("end_date") endDate: String = "",
+        @Query("start_date") startDate: String = getNextSevenDaysFormattedDates()[0],
+        @Query("end_date") endDate: String = getNextSevenDaysFormattedDates()[7],
         @Query("api_key") apiKey: String = API_KEY
     ): String
 }

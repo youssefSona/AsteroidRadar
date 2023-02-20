@@ -14,10 +14,6 @@ import org.json.JSONObject
 class AsteroidsRepo(private val database: AsteroidDB) {
 
 
-//    fun getRealEstateList(type: Type = Type.ALL): LiveData<List<RealEstate>> = when (type) {
-//        Type.ALL -> dao.getRealEstates()
-//        else -> dao.getRealEstatesByType(type)
-//    }
 
     val dataAll: LiveData<List<Asteroid>> =
         Transformations.map(database.asteroidDao.getAsteroidData()) {
@@ -36,6 +32,7 @@ class AsteroidsRepo(private val database: AsteroidDB) {
             it.asAsteroids()
         }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     suspend fun refreshData() {
         withContext(Dispatchers.IO) {
             val response = AsteroidApi.retrofitService.getAsteroids()
